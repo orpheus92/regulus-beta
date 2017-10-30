@@ -27,15 +27,14 @@ var Regulus = /** @class */ (function (_super) {
         //Some fix
         _this._executed = new signaling_1.Signal(_this);
         _this.addClass(REGULUS_CLASS);
-        //   console.log('Regulus widget');
         _this.contentFactory = (options.contentFactory || Regulus.defaultContentFactory);
         _this.session = options.session;
         _this._content = new widgets_1.Panel();
         _this._content.addClass(CONTENT_CLASS);
         var layout = _this.layout = new widgets_1.PanelLayout();
         layout.addWidget(_this._content);
-        //   console.log('In Widget Constructor');
         // Set up the foreign iopub handler.
+        // console.log("#### Test whether ForeignHandler is updated from Widget");
         _this._foreignHandler = new foreign_1.ForeignHandler({
             session: _this.session,
             parent: _this,
@@ -50,7 +49,7 @@ var Regulus = /** @class */ (function (_super) {
          * A signal emitted when the console finished executing its prompt cell.
          */
         get: function () {
-            console.log("Finish execute in Regulus");
+            //console.log("Finish execute in Regulus");
             return this._executed;
         },
         enumerable: true,

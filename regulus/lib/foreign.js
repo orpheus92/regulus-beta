@@ -27,9 +27,9 @@ var ForeignHandler = /** @class */ (function () {
         this._enabled = true;
         // private _factory: () => CodeCell;
         this._isDisposed = false;
-        // console.log("ForeignHandler Constructor");
-        // console.log(options);
         this.session = options.session;
+        console.log("#### Session used for ForeignHandler");
+        console.log(options);
         this.session.iopubMessage.connect(this.onIOPubMessage, this);
         //this._factory = options.cellFactory;
         this._parent = options.parent;
@@ -85,9 +85,6 @@ var ForeignHandler = /** @class */ (function () {
      * previously injected cell being updated and `false` for all other messages.
      */
     ForeignHandler.prototype.onIOPubMessage = function (sender, msg) {
-        //    console.log("#### In onIOPubMessage");
-        //    console.log(sender);
-        //    console.log(msg);
         // Only process messages if foreign cell injection is enabled.
         if (!this._enabled) {
             return false;
@@ -96,18 +93,20 @@ var ForeignHandler = /** @class */ (function () {
         if (!kernel) {
             return false;
         }
+        console.log("####Compare MSG and Kernel:");
+        console.log(msg);
+        console.log(kernel);
         // Check whether this message came from an external session.
         var parent = this._parent;
+        console.log("parent = ");
+        console.log(parent);
         var session = msg.parent_header.session;
-        console.log("Check whether this message came from an external session:");
-        console.log(session);
-        console.log(kernel);
         if (session === kernel.clientId) {
             return false;
         }
         var msgType = msg.header.msg_type;
-        var parentHeader = msg.parent_header;
-        var parentMsgId = parentHeader.msg_id;
+        //let parentHeader = msg.parent_header as KernelMessage.IHeader;
+        //let parentMsgId = parentHeader.msg_id as string;
         //let cell: CodeCell | undefined;
         console.log("msgType");
         console.log(msgType);
@@ -116,9 +115,9 @@ var ForeignHandler = /** @class */ (function () {
                 var inputMsg = msg;
                 //cell = this._newCell(parentMsgId);
                 console.log(inputMsg);
-                console.log(inputMsg.content.code);
-                console.log("parentMsgId");
-                console.log(parentMsgId);
+                //console.log(inputMsg.content.code);
+                //console.log("parentMsgId");
+                //console.log(parentMsgId);
                 //let model = cell.model;
                 //model.executionCount = inputMsg.content.execution_count;
                 //model.value.text = inputMsg.content.code;
@@ -126,6 +125,8 @@ var ForeignHandler = /** @class */ (function () {
                 //console.log("Model in Execute_Input");
                 //console.log(model);
                 parent.update();
+                console.log("newparent = ");
+                console.log(parent);
                 return true;
             case 'execute_result':
             case 'display_data':

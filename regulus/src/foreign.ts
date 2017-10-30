@@ -36,9 +36,11 @@ class ForeignHandler implements IDisposable {
    * Construct a new foreign message handler.
    */
   constructor(options: ForeignHandler.IOptions) {
-   // console.log("ForeignHandler Constructor");
-   // console.log(options);
+
     this.session = options.session;
+    console.log("#### Session used for ForeignHandler");
+    console.log(options);
+
     this.session.iopubMessage.connect(this.onIOPubMessage, this);
     //this._factory = options.cellFactory;
     this._parent = options.parent;
@@ -92,9 +94,7 @@ class ForeignHandler implements IDisposable {
    * previously injected cell being updated and `false` for all other messages.
    */
   protected onIOPubMessage(sender: IClientSession, msg: KernelMessage.IIOPubMessage): boolean {
-//    console.log("#### In onIOPubMessage");
-//    console.log(sender);
-//    console.log(msg);
+
     // Only process messages if foreign cell injection is enabled.
     if (!this._enabled) {
       return false;
@@ -104,18 +104,22 @@ class ForeignHandler implements IDisposable {
       return false;
     }
 
+
+    console.log("####Compare MSG and Kernel:");
+    console.log(msg);
+    console.log(kernel);
     // Check whether this message came from an external session.
     let parent = this._parent;
+    console.log("parent = ");
+    console.log(parent);
     let session = (msg.parent_header as KernelMessage.IHeader).session;
-    console.log("Check whether this message came from an external session:");
-    console.log(session);
-    console.log(kernel);
+
     if (session === kernel.clientId) {
       return false;
     }
     let msgType = msg.header.msg_type;
-    let parentHeader = msg.parent_header as KernelMessage.IHeader;
-    let parentMsgId = parentHeader.msg_id as string;
+    //let parentHeader = msg.parent_header as KernelMessage.IHeader;
+    //let parentMsgId = parentHeader.msg_id as string;
     //let cell: CodeCell | undefined;
     console.log("msgType");
     console.log(msgType);
@@ -124,9 +128,9 @@ class ForeignHandler implements IDisposable {
       let inputMsg = msg as KernelMessage.IExecuteInputMsg;
       //cell = this._newCell(parentMsgId);
       console.log(inputMsg);
-      console.log(inputMsg.content.code);
-      console.log("parentMsgId");
-      console.log(parentMsgId);
+      //console.log(inputMsg.content.code);
+      //console.log("parentMsgId");
+      //console.log(parentMsgId);
       //let model = cell.model;
       //model.executionCount = inputMsg.content.execution_count;
       //model.value.text = inputMsg.content.code;
@@ -134,6 +138,8 @@ class ForeignHandler implements IDisposable {
       //console.log("Model in Execute_Input");
       //console.log(model);
       parent.update();
+    console.log("newparent = ");
+    console.log(parent);
       return true;
     case 'execute_result':
     case 'display_data':

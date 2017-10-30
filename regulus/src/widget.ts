@@ -37,7 +37,6 @@ class Regulus extends Widget {
   constructor(options: Regulus.IOptions) {
     super();
     this.addClass(REGULUS_CLASS);
- //   console.log('Regulus widget');
 
     this.contentFactory = (
       options.contentFactory || Regulus.defaultContentFactory
@@ -49,9 +48,9 @@ class Regulus extends Widget {
 
     let layout = this.layout = new PanelLayout();
     layout.addWidget(this._content);
- //   console.log('In Widget Constructor');
 
     // Set up the foreign iopub handler.
+    // console.log("#### Test whether ForeignHandler is updated from Widget");
     this._foreignHandler = new ForeignHandler({
       session: this.session,
       parent: this,
@@ -68,7 +67,7 @@ class Regulus extends Widget {
    * A signal emitted when the console finished executing its prompt cell.
    */
   get executed(): ISignal<this, Date> {
-    console.log("Finish execute in Regulus");
+    //console.log("Finish execute in Regulus");
     return this._executed;
   }
 
