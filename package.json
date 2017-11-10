@@ -1,0 +1,36 @@
+{
+  "name": "regulus",
+  "version": "0.1.0",
+  "description": "Visual analytics environment based on JupyterLab",
+  "scripts": {
+    "install": "lerna bootstrap --hoist",
+    "build": "lerna run build",
+    "build:src": "lerna run build --scope \"@regulus/!(test-)*\"",
+    "build:test": "lerna run build:test",
+
+    "clean": "lerna run clean",
+    "clean:slate": "git clean -dfx && npm install && npm run build",
+    "clean:tests": "lerna run clean --scope \"@regulus/test-*\"",
+
+    "docs": "lerna run docs",
+
+    "publish": "npm run clean:slate && lerna publish --force-publish=* -m \"Publish\"",
+
+    "test": "cd test && npm test",
+    "test:chrome": "lerna run test:chrome --stream",
+    "test:firefox": "lerna run test:firefox --stream",
+    "test:ie": "lerna run test:ie --concurrency 1 --stream",
+
+    "watch": "watch \"npm run build\" ./packages/** --wait 10 --filter=scripts/watch-filter.js --ignoreDotFiles"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yarden-livnat/cycle.git"
+  },
+  "author": "Yarden Livnat <yarden@sci.utah.edu>",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "lerna": "^2.4.0"
+  }
+}
